@@ -26,3 +26,23 @@ if __name__ == '__main__':
     now = 0
     for i in range(1, len(input) -1):
         str= ""
+        str += (input[0])
+        for j in range(len(input) -1):
+            now += i
+            if (now > len(input) -1):
+                now = now % (len(input) -1)
+            str+= input[now]
+        str = str.replace('_','')
+        lookup = [-1] * (len(str) + 1)
+        result = []
+        if wordBreak(dictionary, str, lookup, result):
+            print("The decrypted message is:")
+            for words in result:
+                print(words, end=' ')
+            print()
+            break
+        else:
+            if(i ==len(input) -2):
+                print("Scytale doesn't have any secret message")
+    end = time.time()
+    print(round(end-start, 8), "seconds are needed to find the solution above")
