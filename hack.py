@@ -23,6 +23,16 @@ def wordBreak(dictionary, str, lookup, result):
 if __name__ == '__main__':
     start = time.time()
     dictionary = [
+        "nombre", "no", "quiero", "acordarme",
+        "En",
+        "un",
+        "lugar",
+        "de",
+        "la",
+        "Mancha",
+        "de",
+        ",",
+        "cuyo",
         "one",
         "two",
         "three",
@@ -61,6 +71,8 @@ if __name__ == '__main__':
 
     # sample scytale ciphertext
     input = "dbtheouoevyigleolepnudtmmwhheaaoegnnurigtsavoteneeosdss"
+    e_msg = "EaMemurnra bid  ncreaudcuerrnehy om  aon ell, oa ua n c g doqo "
+    input = e_msg
 
     now = 0
     for i in range(1, len(input) - 1):
@@ -71,7 +83,7 @@ if __name__ == '__main__':
             if (now > len(input) - 1):
                 now = now % (len(input) - 1)
             str += input[now]
-        str = str.replace('_', '')
+        str = str.replace(' ', '')
         lookup = [-1] * (len(str) + 1)
         result = []
         if wordBreak(dictionary, str, lookup, result):
@@ -85,3 +97,4 @@ if __name__ == '__main__':
                 print("Scytale doesn't have any secret message")
     end = time.time()
     print(round(end - start, 8), "seconds are needed to find the solution above")
+
