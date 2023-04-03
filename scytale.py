@@ -1,5 +1,7 @@
+#!/usr/bin/env python3
+import argparse
 import numpy as np
-def encrypt(msg, n):
+def encrypt(msg, perimeter):
     lenght = len(msg)
     size = lenght + (perimeter - lenght%perimeter)  if lenght%perimeter != 0 else lenght
     # Fix the length of the string by adding spaces
@@ -7,8 +9,8 @@ def encrypt(msg, n):
     padded_string = msg.ljust(size)
     
     # Split the padded string into n-sized chunks
-    chunks = [list(padded_string[i:i+n]) for i in range(0, size, n)]
-    print(f"{size=}\n{chunks=}")
+    chunks = [list(padded_string[i:i+perimeter]) for i in range(0, size, perimeter)]
+    # print(f"{size=}\n{chunks=}")
     return ''.join(np.transpose(chunks).flatten())
 
 def decrypt(msg, perimeter):
@@ -19,13 +21,33 @@ def decrypt(msg, perimeter):
     return last
 
 
-# msg = "hola como estas"
+def _main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("msg", nargs='?', help="message or file to read from", type=str, default='En un lugar de la Mancha, de cuyo nombre no quiero acordarme')
+    parser.add_argument("key", nargs='?',help="key to decrypt/encrypt", type=int, default=5)
+    parser.add_argument('-f', '--file', action="store_true", help= 'read from a file')
+    parser.add_argument('-d', "--decrypt", action="store_true", help= 'encrypt or decrypt')
+    parser.add_argument('-v', "--verbose", action="store_true", help= 'encrypt and decrypt. Not valid with -d option')
+    args = parser.parse_args()
+    perimeter = args.key 
+    msg= args.msg
+    if args.file:
+        with open(args.msg)as f:
+            msg = f.read()
+    if (args.verbose and args.decrypt):
+        print("Error: verbose only allow to encrypt, then decrypt")
+        exit()
+
+    if args.verbose:
+        e_msg = encrypt(msg, perimeter)
+        print(f"{e_msg=}") 
+        de_msg = decrypt(e_msg, perimeter)
+        print(f"{de_msg=}")
+        print("it works") if de_msg == msg else print(f" {de_msg=} !=== {msg=}")
+    elif args.decrypt:
+        print(f"The message was: '{decrypt(msg, perimeter)}'")
+    else:
+        print(f"The encypted message is: '{encrypt(msg, perimeter)}'")
+
 if __name__ == '__main__':
-    msg = 'En un lugar de la Mancha, de cuyo nombre no quiero acordarme'
-    perimeter = 5
-    e_msg = encrypt(msg, perimeter)
-    print(f"{e_msg=}") 
-    de_msg = decrypt(e_msg, perimeter)
-    # print(de_msg)
-    # print("it works") if de_msg == msg else print(f" {de_msg=} !=== {msg=}")
-    print(f"{de_msg=}")
+    _main()
