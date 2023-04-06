@@ -24,7 +24,7 @@ def decrypt(msg, perimeter):
 
 def _main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("msg", nargs='?', help="message or file to read from", type=str, default='En un lugar de la Mancha, de cuyo nombre no quiero acordarme')
+    parser.add_argument("msg", nargs='?', help="message or file to read from", type=str)
     parser.add_argument("key", nargs='?',help="key to decrypt/encrypt", type=int, default=5)
     parser.add_argument('-f', '--file', action="store_true", default=False, help= 'read from a file')
     parser.add_argument('-d', "--decrypt", action="store_true", default=False, help= 'encrypt or decrypt')
@@ -32,10 +32,12 @@ def _main():
     parser.add_argument('-q', "--quiet", action="store_true", default=False, help= 'output quietly (as is)')
     args = parser.parse_args()
     perimeter = args.key 
-    msg= args.msg
-    if args.file:
-        with open(args.msg)as f:
-            msg = f.read()
+
+    if args.msg:
+        msg = open(args.msg).read() if args.file else args.msg
+    else:
+        msg = input()
+
     if (args.verbose and args.decrypt):
         print("Error: verbose only allow to encrypt, then decrypt")
         exit()
