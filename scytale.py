@@ -4,13 +4,8 @@ import numpy as np
 def encrypt(msg, perimeter):
     lenght = len(msg)
     size = lenght + (perimeter - lenght%perimeter)  if lenght%perimeter != 0 else lenght
-    # Fix the length of the string by adding spaces
-    # Fix the length of the string by adding spaces
     padded_string = msg.ljust(size)
-    
-    # Split the padded string into n-sized chunks
     chunks = [list(padded_string[i:i+perimeter]) for i in range(0, size, perimeter)]
-    # print(f"{size=}\n{chunks=}")
     return ''.join(np.transpose(chunks).flatten())
 
 def decrypt(msg, perimeter):
@@ -31,7 +26,7 @@ def _main():
     parser.add_argument('-v', "--verbose", action="store_true", default=False, help= 'encrypt and decrypt. Not valid with -d option')
     parser.add_argument('-q', "--quiet", action="store_true", default=False, help= 'output quietly (as is)')
     args = parser.parse_args()
-    perimeter = args.key 
+    perimeter = args.key
 
     if args.msg:
         msg = open(args.msg).read() if args.file else args.msg
@@ -44,7 +39,7 @@ def _main():
 
     if args.verbose:
         e_msg = encrypt(msg, perimeter)
-        print(f"{e_msg=}") 
+        print(f"{e_msg=}")
         de_msg = decrypt(e_msg, perimeter)
         print(f"{de_msg=}")
         print("it works") if de_msg == msg else print(f" {de_msg=} !=== {msg=}")
