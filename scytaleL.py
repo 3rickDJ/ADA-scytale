@@ -1,23 +1,76 @@
 # algoritmo de cifrado y descifrado escitala
 from math import ceil
 def cifrar(msg, n):
-    # pad msg with * to make it a multiple of n
-    msg = msg.ljust(n  * ceil(len(msg)/n), '*')
-    # take slices of n chars
-    chunks = [list(msg[i:i+n]) for i in range(0, len(msg), n)]
-    # transpose the matrix
-    t =  _transpose(chunks)
+    # length of each row
+    l = int(ceil(len(msg) / float(n)))
+    # padding message with * to make it a multiple of n
+    msg = msg.ljust(l * n, '*')
+    # take slices of l chars
+    # chunks = [msg[i:i+l] for i in range(0,len(msg),l)]
+    chunks = [ list(t) for t in zip(*[iter(msg)]*l)]
+    # transpose the matrix https://docs.python.org/3/tutorial/controlflow.html#unpacking-argument-lists
+    transposed_msg = [list(i) for i in zip(*chunks)]
     # take each char and join them
-    return ''.join([i for row in t for i in row])
+    return ''.join(''.join(row) for row in transposed_msg)
 
 def descifrar(msg, n):
     chunks = [list(msg[i:i+n]) for i in range(0, len(msg), n)]
-
-def _transpose(matrix):
-    return [[row[i] for row in matrix] for i in range(len(matrix[0]))]
+    transposed_msg = [list(i) for i in zip(*chunks)]
+    return ''.join([''.join(row) for row in transposed_msg])
 
 def main():
-    pass
+    msg ="hola como estas"
+    for i in range(2,len(msg)):
+        e_msg = cifrar(msg, i)
+        d_msg = descifrar(e_msg, i)
+        print("n: %d, e_msg:\n%s\n, d_msg:\n%s\n" % (i, e_msg, d_msg))
 
-for i in range(2,100):
-    print( cifrar("hola como estas", i))
+if __name__ == "__main__":
+    opt = input("1. Cifrar\n2. Descifrar\n3. Salir")
+    if opt == "1":
+        format = input("1. Imagen\n2. Texto\n3. Archivo")
+        if format == "1":
+            img = input("Ingrese la ruta de la imagen")
+            n = input("Ingrese el numero de filas")
+            img = open(img, "rb").read()
+            e_img = cifrar(img, n)
+            name = img + '.cifrado'
+            open(name, 'wb').write(e_img)
+            print(f"Imagen cifrada en {name}")
+        elif format == "2":
+            msg = input("Ingrese el mensaje: ")
+            n = input("Ingrese el numero de filas: ")
+            e_msg = cifrar(msg, n)
+            print(e_msg)
+        elif format == "3":
+            file = input("Ingrese la ruta del archivo")
+            n = input("Ingrese el numero de filas")
+            file = open(file, "r").read()
+            e_file = cifrar(file, n)
+            name = file + '.cifrado'
+            open(name, 'wb').write(e_file)
+            print(f"Archivo cifrado en {name}")
+    elif opt == "2":
+        format = input("1. Imagen\n2. Texto\n3. Archivo")
+        if format == "1":
+            img = input("Ingrese la ruta de la imagen")
+            n = input("Ingrese el numero de filas")
+            img = open(img, "rb").read()
+            d_img = descifrar(img, n)
+            name = img + '.descifrado'
+            open(name, 'wb').write(d_img)
+            print(f"Imagen descifrada en {name}")
+        elif format == "2":
+            msg = input("Ingrese el mensaje: ")
+            n = input("Ingrese el numero de filas: ")
+            d_msg = descifrar(msg, n)
+            print(d_msg)
+        elif format == "3":
+            file = input("Ingrese la ruta del archivo")
+            n = input("Ingrese el numero de filas")
+            file = open(file, "r").read()
+            d_file = descifrar(file, n)
+            name = file + '.descifrado'
+            open(name, 'wb').write(d_file)
+            print(f"Archivo descifrado en {name}")
+    print("I'm sorry Dave")
