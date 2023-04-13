@@ -12,6 +12,6 @@ class Scytale
   end
 end
 
-if $0 == __FILE__
-  cipher = Scytale.new
-end
+# if $PROGRAM_NAME == __FILE__
+#   # cipher = Scytale.new
+# end
