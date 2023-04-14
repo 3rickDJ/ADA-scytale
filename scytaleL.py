@@ -53,44 +53,44 @@ if __name__ == "__main__":
             img = input("Ingrese la ruta de la imagen")
             n = input("Ingrese el numero de filas")
             img = open(img, "rb").read()
-            e_img = cifrar(img, n)
-            name = img + '.cifrado'
+            e_img = cifrar(img, n, file=True)
+            name = 'cifrado.' + img
             open(name, 'wb').write(e_img)
             print(f"Imagen cifrada en {name}")
         elif format == "2":
             msg = input("Ingrese el mensaje: ")
             n = input("Ingrese el numero de filas: ")
             e_msg = cifrar(msg, n)
-            print(e_msg)
+            print(f"'{e_msg}'")
         elif format == "3":
-            file = input("Ingrese la ruta del archivo")
-            n = input("Ingrese el numero de filas")
+            file = input("Ingrese la ruta del archivo: ")
+            n = input("Ingrese el numero de filas: ")
             file = open(file, "r").read()
             e_file = cifrar(file, n)
-            name = file + '.cifrado'
+            name = 'cifrado.' + file
             open(name, 'wb').write(e_file)
             print(f"Archivo cifrado en {name}")
     elif opt == "2":
         format = input("1. Imagen\n2. Texto\n3. Archivo")
         if format == "1":
-            img = input("Ingrese la ruta de la imagen")
-            n = input("Ingrese el numero de filas")
+            img = input("Ingrese la ruta de la imagen: ")
+            n = input("Ingrese el numero de filas: ")
             img = open(img, "rb").read()
-            d_img = descifrar(img, n)
-            name = img + '.descifrado'
+            d_img = descifrar(img, n, file=True)
+            name = '.descifrado' + img
             open(name, 'wb').write(d_img)
             print(f"Imagen descifrada en {name}")
         elif format == "2":
             msg = input("Ingrese el mensaje: ")
             n = input("Ingrese el numero de filas: ")
             d_msg = descifrar(msg, n)
-            print(d_msg)
+            print(f"'{d_msg}'")
         elif format == "3":
-            file = input("Ingrese la ruta del archivo")
-            n = input("Ingrese el numero de filas")
+            file = input("Ingrese la ruta del archivo: ")
+            n = input("Ingrese el numero de filas: ")
             file = open(file, "r").read()
             d_file = descifrar(file, n)
-            name = file + '.descifrado'
+            name = '.descifrado' + file
             open(name, 'wb').write(d_file)
             print(f"Archivo descifrado en {name}")
     print("I'm sorry Dave")
