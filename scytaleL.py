@@ -1,22 +1,42 @@
 # algoritmo de cifrado y descifrado escitala
 from math import ceil
-def cifrar(msg, n):
+def cifrar(msg, n, file=False):
+    # convert ascii string to bytes
+    if type(msg)==str:
+        msg = bytes(msg, encoding='ascii')
+    n = int(n)
     # length of each row
     l = int(ceil(len(msg) / float(n)))
-    # padding message with * to make it a multiple of n
-    msg = msg.ljust(l * n, '*')
+    # padding message with ' ' to make it a multiple of n
+    msg = msg.ljust(l * n, b' ')
     # take slices of l chars
-    # chunks = [msg[i:i+l] for i in range(0,len(msg),l)]
-    chunks = [ list(t) for t in zip(*[iter(msg)]*l)]
-    # transpose the matrix https://docs.python.org/3/tutorial/controlflow.html#unpacking-argument-lists
-    transposed_msg = [list(i) for i in zip(*chunks)]
+    chunks = [msg[i:i+l] for i in range(0,len(msg),l)]
+    transposed_codes = _transpose(chunks)
     # take each char and join them
-    return ''.join(''.join(row) for row in transposed_msg)
+    transposed_msg = list(map(lambda row: bytes(row), transposed_codes))
+    msg =  b''.join(transposed_msg)
+    # return bytes or ascii string
+    if file:
+        return msg
+    return msg.decode(encoding='ascii')
 
-def descifrar(msg, n):
-    chunks = [list(msg[i:i+n]) for i in range(0, len(msg), n)]
-    transposed_msg = [list(i) for i in zip(*chunks)]
-    return ''.join([''.join(row) for row in transposed_msg])
+def _transpose(matrix):
+    return [bytes([row[i] for row in matrix]) for i in range(len(matrix[0]))]
+
+def descifrar(msg, n, file=False):
+    # convert ascii string to bytes
+    if type(msg)==str:
+        msg = bytes(msg, encoding='ascii')
+    # take slices of n chars
+    chunks = [msg[i:i+n] for i in range(0, len(msg), n)]
+    transposed_codes = _transpose(chunks)
+    # take each char and join them
+    transposed_msg = list(map(lambda row: bytes(row), transposed_codes))
+    msg = b''.join(transposed_msg)
+    # return bytes or ascii string
+    if file:
+        return msg
+    return msg.decode(encoding='ascii')
 
 def main():
     msg ="hola como estas"
